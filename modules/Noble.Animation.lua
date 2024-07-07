@@ -138,7 +138,7 @@ function Noble.Animation.new(__view)
 			self.currentFrame = __startFrame
 			self.current = self[__name]
 			self.currentName = __name
-			self.frameDuration = frameDuration
+			self.current.frameDuration = frameDuration
 		end
 
 	end
@@ -238,13 +238,13 @@ function Noble.Animation.new(__view)
 		elseif(self.currentFrame == self.current.endFrame + 1) then	-- End frame behavior.
 			if (self.current.next ~= nil) then
 				self.currentFrame = self.current.next.startFrame	-- Set to first frame of next animation.
-				self.frameDurationCount = 1										-- Reset ticks.
-				self.previousFrameDurationCount = self.frameDuration
+				self.current.frameDurationCount = 1										-- Reset ticks.
+				self.previousFrameDurationCount = self.current.frameDuration
 				self:setState(self.current.next)					-- Set next animation state.
 			elseif (self.current.loop == true) then
 				self.currentFrame = self.current.startFrame 		-- Loop animation state. (TO-DO: account for continuous somehow?)
-				self.frameDurationCount = 1										-- Reset ticks.
-				self.previousFrameDurationCount = self.frameDuration
+				self.current.frameDurationCount = 1										-- Reset ticks.
+				self.previousFrameDurationCount = self.current.frameDuration
 			elseif(__advance) then
 				self.currentFrame = self.currentFrame - 1			-- Undo advance frame because we want to draw the same frame again.
 			end
@@ -259,8 +259,8 @@ function Noble.Animation.new(__view)
 		self.imageTable:drawImage(self.currentFrame, x, y, self.direction)
 
 		if (__advance == true) then
-			self.frameDurationCount += 1
-			if((self.frameDurationCount - self.previousFrameDurationCount) >= self.current.frameDuration) then
+			self.current.frameDurationCount += 1
+			if((self.current.frameDurationCount - self.previousFrameDurationCount) >= self.current.frameDuration) then
 				self.currentFrame = self.currentFrame + 1
 				self.previousFrameDurationCount += self.current.frameDuration
 			end
